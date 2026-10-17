@@ -1,0 +1,7 @@
+requests>=2.31
+dnspython>=2.4
+beautifulsoup4>=4.12
+fastapi>=0.110
+uvicorn[standard]>=0.27
+gunicorn>=21.2
+redis>=5.0

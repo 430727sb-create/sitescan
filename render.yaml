@@ -1,0 +1,26 @@
+# Render Blueprint — één klik zet de webservice + gratis Key Value neer.
+# Geen keep-alive: de gratis service slaapt na 15 min stilte (cold start ~1 min).
+services:
+  - type: web
+    name: sitescan
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: RATE_LIMIT_PER_HOUR
+        value: "20"
+      - key: CACHE_TTL
+        value: "3600"
+      - key: REDIS_URL
+        fromService:
+          name: sitescan-kv
+          type: keyvalue
+          property: connectionString
+
+  # Gratis Redis (25 MB, intern bereikbaar). Weglaten mag: dan valt de app
+  # terug op in-memory cache/rate-limit.
+  - type: keyvalue
+    name: sitescan-kv
+    plan: free
+    ipAllowList: []
